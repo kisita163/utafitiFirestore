@@ -13,11 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 'use strict';
 
+// [START import]
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const request = require('request');
+//admin.initializeApp()
+const spawn = require('child-process-promise').spawn;
+const path = require('path');
+const os = require('os');
+const fs = require('fs');
+const request = require('request'); 
+// [END import]
 
 admin.initializeApp();
 
@@ -77,7 +85,7 @@ function onMessageAlertFailure(error){
 	console.log('Error sending message:', error);
 }
 
-exports.currentSurvey = functions.storage.object().onFinalize((object) => {
+exports.currentSurvey = functions.storage.object().onFinalize( async (object) => {
 	// Create storage reference
 	var storage    = admin.storage().bucket();
 	var surveyRef;
@@ -103,6 +111,3 @@ exports.currentSurvey = functions.storage.object().onFinalize((object) => {
 		promise.then(newSurveyAlertTest,null).catch(onMessageAlertFailure);
 	}
 });
-
-
-
